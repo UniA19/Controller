@@ -1,0 +1,78 @@
+package diy.esp8266.controller;
+
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+public class JoystickFAB extends FloatingActionButton {
+
+    public static final int RADIUS = 150; //is also in fragment_first.xml
+    public static final int SIZE = 70; //is also in fragment_first.xml
+    float posX;
+    float posY;
+
+    public JoystickFAB(Context context)
+    {
+        super(context);
+        setSpecificThings();
+    }
+
+    public JoystickFAB(Context context, AttributeSet attrs)
+    {
+        super(context, attrs);
+        setSpecificThings();
+    }
+
+    public JoystickFAB(Context context, AttributeSet attrs, int defStyleAttr)
+    {
+        super(context, attrs, defStyleAttr);
+        setSpecificThings();
+    }
+
+    public void setDefaultPosition(float x, float y)
+    {
+        setX(x - ((float)getWidth() / 2));
+        posX = x;
+        setY(y -((float)getHeight() / 2));
+        posY = y;
+    }
+
+    private void setSpecificThings()
+    {
+        setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (view.isClickable()) {
+                    switch (event.getActionMasked()) {
+                        case MotionEvent.ACTION_DOWN:
+                            break;
+
+                        case MotionEvent.ACTION_MOVE:
+                            if (Math.sqrt(Math.pow(event.getRawX() - posX, 2) + Math.pow(event.getRawY() - posY, 2)) < RADIUS) {
+                                view.setX(event.getRawX() - ((float) view.getWidth() / 2));
+                                view.setY(event.getRawY() - ((float) view.getHeight() / 2));
+                            } else {
+                                float temp = (float) (RADIUS / Math.sqrt(Math.pow(event.getRawX() - posX, 2) + Math.pow(event.getRawY() - posY, 2)));
+                                view.setX(((event.getRawX() - posX) * temp) + posX - ((float) view.getWidth() / 2));
+                                view.setY(((event.getRawY() - posY) * temp) + posY - ((float) view.getHeight() / 2));
+                            }
+                            break;
+
+                        case MotionEvent.ACTION_UP:
+                            view.setX(posX - ((float) getWidth() / 2));
+                            view.setY(posY - ((float) getHeight() / 2));
+                            view.performClick();
+                            break;
+
+                        default:
+                            return false;
+                    }
+                }
+                return true;
+            }
+        });
+    }
+}
