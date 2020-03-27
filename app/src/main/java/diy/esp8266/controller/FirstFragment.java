@@ -24,17 +24,18 @@ public class FirstFragment extends Fragment {
         view.post(new Runnable() {
             @Override
             public void run() {
+                Calculator calculator = new Calculator(getContext());
                 int padding = 250 + JoystickFAB.RADIUS;
                 JoystickFAB left = view.findViewById(R.id.joystick_left);
                 ImageView backLeft = view.findViewById(R.id.background_left);
                 JoystickFAB right = view.findViewById(R.id.joystick_right);
                 ImageView backRight = view.findViewById(R.id.background_right);
 
-                left.setDefaultPosition(padding, (float) view.getHeight() / 2);
+                left.setDefaultPosition(padding, (float) view.getHeight() / 2, "left", calculator);
                 backLeft.setX(padding - (float) backLeft.getWidth() / 2);
                 backLeft.setY((float) (view.getHeight() - backLeft.getHeight()) / 2);
 
-                right.setDefaultPosition(view.getWidth() - padding, (float) view.getHeight() / 2);
+                right.setDefaultPosition(view.getWidth() - padding, (float) view.getHeight() / 2, "right", calculator);
                 backRight.setX(view.getWidth() - padding - (float) backLeft.getWidth() / 2);
                 backRight.setY((float) (view.getHeight() - backLeft.getHeight()) / 2);
 
