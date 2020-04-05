@@ -30,16 +30,22 @@ class Calculator extends Thread {
     }
 
     @Override
-    public void run() {
+    public void run()
+    {
         super.run();
-        try {
-            socket = new Socket("192.168.4.1", 100);
-            out = socket.getOutputStream();
-            output = new PrintWriter(out);
-        } catch (Exception e) {
-            Toast.makeText(context, "Could not connect to ESP8266! Please restart the App", Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-            System.out.println(e.getMessage());
+
+        while (output == null) {
+
+            try {
+                socket = new Socket("192.168.4.1", 100);
+                out = socket.getOutputStream();
+                output = new PrintWriter(out);
+            } catch (Exception e) {
+                e.printStackTrace();
+                try {
+                    sleep(10000);
+                } catch(Exception ignored) {}
+            }
         }
 
         while (true) {
