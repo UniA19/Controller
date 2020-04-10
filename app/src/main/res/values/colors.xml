@@ -3,6 +3,6 @@
     <color name="colorPrimary">#6A1B9A</color>
     <color name="colorPrimaryDark">#470088</color>
     <color name="colorPrimaryLigth">#D500F9</color>
-    <color name="colorAccent">#D500F9</color>
-    <color name="colorDarkKnigth">#424242</color>
+    <color name="colorAccent">#00796b</color>
+    <color name="colorDarkKnight">#303030</color>
 </resources>
