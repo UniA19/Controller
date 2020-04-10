@@ -7,7 +7,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-class Calculator extends Thread {
+class Connection extends Thread {
 
     int leftX = 0, leftY = 0, rightX = 0, rightY = 0;
     private int leftFront, leftBack, rightFront, rightBack;
@@ -23,10 +23,10 @@ class Calculator extends Thread {
 
     private boolean sendData = false;
 
-    Calculator(Context context)
+    Connection(Context context)
     {
         this.context = context;
-        start();
+        //start();
     }
 
     @Override
@@ -39,7 +39,6 @@ class Calculator extends Thread {
         } catch (Exception e) {
             Toast.makeText(context, "Could not connect to ESP8266! Please restart the App", Toast.LENGTH_LONG).show();
             e.printStackTrace();
-            System.out.println(e.getMessage());
         }
 
         while (true) {
@@ -55,6 +54,7 @@ class Calculator extends Thread {
 
     private void update()
     {
+        //todo delete
         System.out.println("Update to: leftX: " + leftX + " leftY: " + leftY + " rightX: " + rightX + " rightY: " + rightY);
         int base = Math.abs((leftY - JoystickFAB.RADIUS) * 100 / (2 * JoystickFAB.RADIUS)); //leftY
         System.out.println("Base: " + base);
