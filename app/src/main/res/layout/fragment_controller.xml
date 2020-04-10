@@ -9,7 +9,7 @@
     tools:context=".ControllerFragment">
 
     <diy.esp8266.controller.JoystickFAB
-        app:backgroundTint="@color/colorAccent"
+        app:backgroundTint="@color/colorPrimaryLigth"
         android:id="@+id/joystick_left"
         android:layout_width="70dp"
         android:layout_height="70dp"
@@ -17,7 +17,7 @@
         android:focusable="true" />
 
     <diy.esp8266.controller.JoystickFAB
-        app:backgroundTint="@color/colorAccent"
+        app:backgroundTint="@color/colorPrimaryLigth"
         android:id="@+id/joystick_right"
         android:layout_width="70dp"
         android:layout_height="70dp"
