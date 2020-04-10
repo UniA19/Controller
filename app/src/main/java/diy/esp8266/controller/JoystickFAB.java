@@ -9,8 +9,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class JoystickFAB extends FloatingActionButton {
 
-    public static final int RADIUS = 150; //is also in fragment_first.xml
-    public static final int SIZE = 60; //is also in fragment_first.xml
+    public static final int RADIUS = 150; //is also in fragment_controlleroller.xml
+    public static final int SIZE = 60; //is also in fragment_controller.xmlr.xml
     float posX;
     float posY;
 

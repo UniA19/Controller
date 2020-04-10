@@ -9,7 +9,7 @@
         android:id="@+id/FirstFragment"
         android:name="diy.esp8266.controller.ControllerFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        tools:layout="@layout/fragment_controller">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
