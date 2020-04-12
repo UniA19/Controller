@@ -9,8 +9,7 @@
     tools:context=".ControllerFragment">
 
     <diy.esp8266.controller.JoystickFAB
-        app:backgroundTint="@color/colorPrimary"
-        android:id="@+id/joystick_left"
+        app:backgroundTint="@color/colorPrimary"        android:id="@+id/joystick_left"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:clickable="true"
@@ -31,7 +30,7 @@
         android:clickable="false"
         android:contentDescription="@string/fragment_first_background_left"
         android:focusable="false"
-        app:srcCompat="@mipmap/kreis" />
+        app:srcCompat="@drawable/joystickbase" />
 
     <ImageView
         android:id="@+id/background_right"
@@ -40,6 +39,6 @@
         android:clickable="false"
         android:contentDescription="@string/fragment_first_background_right"
         android:focusable="false"
-        app:srcCompat="@mipmap/kreis" />
+        app:srcCompat="@drawable/joystickbase" />
 
 </FrameLayout>
