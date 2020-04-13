@@ -2,6 +2,7 @@ package diy.esp8266.controller;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 
 class Connection
@@ -35,6 +36,7 @@ class Connection
                 @Override
                 public void run() {
                     while (true) {
+                        checkConnection();
                         if (updated) {
                             send("<" + leftX + "|" + leftY + "|" + rightX + "|" + rightY + ">");
                             updated = false;
@@ -50,7 +52,12 @@ class Connection
 
     static void checkConnection()
     {
-
+        try {
+            InetAddress address = InetAddress.getByName(HOSTIP);
+            connencted = address.isReachable(100);
+        } catch (Exception ex) {
+            connencted = false;
+        }
     }
 
     static void setLeft(int leftX, int leftY)
@@ -66,6 +73,7 @@ class Connection
         Connection.rightY = rightY;
         updated = true;
     }
+
 
     public static void connect()
     {

@@ -39,16 +39,9 @@ public class JoystickFAB extends FloatingActionButton {
         this.position = position;
         setX(x - ((float)getWidth() / 2));
         posX = x;
-        if (position.equals("left")) {
-            setY(y + RADIUS - ((float) getHeight() / 2));
-            posY = y;
-            Connection.setLeft(0, RADIUS);
-        } else {
-            setY(y - ((float) getHeight() / 2));
-            posY = y;
-            Connection.setRight(0, 0);
-        }
-
+        setY(y - ((float) getHeight() / 2));
+        posY = y;
+        Connection.setRight(0, 0);
     }
 
     private void setSpecificThings()
@@ -84,11 +77,10 @@ public class JoystickFAB extends FloatingActionButton {
 
                         case MotionEvent.ACTION_UP:
                             view.setX(posX - ((float) getWidth() / 2));
+                            view.setY(posY - ((float) getHeight() / 2));
                             if (position.equals("left")) {
-                                //Do not move posY!
-                                Connection.setLeft(0, Connection.leftY);
+                                Connection.setLeft(0, 0);
                             } else {
-                                view.setY(posY - ((float) getHeight() / 2));
                                 Connection.setRight(0, 0);
                             }
 
