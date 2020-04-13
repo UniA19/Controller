@@ -1,35 +1,41 @@
 package diy.esp8266.controller;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class MainActivity extends AppCompatActivity {
+public class ControllerActivity extends AppCompatActivity {
 
-    Globals g = Globals.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Use the chosen theme
+        Globals g = Globals.getInstance();
         if(g.getDark()) {
             setTheme(R.style.AppTheme_Dark_NoActionBar);
         }
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_controller);
 
-        Button calibrationButton = findViewById(R.id.calibrationButton);
-        calibrationButton.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toController();
+                toSettinga();
+            }
+        });
+        FloatingActionButton back = findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toCalibration();
             }
         });
     }
@@ -52,8 +58,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void  toController() {
-        Intent intent = new Intent(this, ControllerActivity.class);
+    private void  toSettinga() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    private void  toCalibration() {
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
