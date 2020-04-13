@@ -1,5 +1,6 @@
 package diy.esp8266.controller;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -8,12 +9,17 @@ import android.view.WindowManager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Use the chosen theme
+        Globals g = Globals.getInstance();
+        if(g.getDark()) {
+            setTheme(R.style.AppTheme_Dark_NoActionBar);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -21,8 +27,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Settings are not implemented jet!", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                toSettinga();
             }
         });
     }
@@ -44,4 +49,10 @@ public class MainActivity extends AppCompatActivity {
             getWindow().getAttributes().layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
         }
     }
+
+    private void  toSettinga() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
 }
