@@ -1,20 +1,21 @@
 package diy.esp8266.controller;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class ControllerActivity extends AppCompatActivity {
-
+public class ControllerActivity extends AppCompatActivity
+{
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         // Use the chosen theme
         Globals g = Globals.getInstance();
         if(g.getDark()) {
@@ -28,7 +29,7 @@ public class ControllerActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toSettinga();
+                toSettings();
             }
         });
         FloatingActionButton back = findViewById(R.id.back);
@@ -41,7 +42,8 @@ public class ControllerActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
 
         View decorView = getWindow().getDecorView();
@@ -58,13 +60,16 @@ public class ControllerActivity extends AppCompatActivity {
         }
     }
 
-    private void  toSettinga() {
+    private void toSettings()
+    {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
 
-    private void  toCalibration() {
+    private void  toCalibration()
+    {
         Intent intent = new Intent(this, MainActivity.class);
+        finish();
         startActivity(intent);
     }
 

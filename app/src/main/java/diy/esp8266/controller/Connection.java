@@ -1,64 +1,73 @@
 package diy.esp8266.controller;
 
-import android.content.Context;
-
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-class Connection extends Thread
+class Connection
 {
     private static final String HOSTIP = "192.168.4.1";
     private static final int PORT = 100;
 
-    int leftX = 0, leftY = 0, rightX = 0, rightY = 0;
+    static int leftX = 0, leftY = 0, rightX = 0, rightY = 0;
 
-    private static final double minPercent = 0.5;
     private static final int coolDown = 150;
 
-    private Context context;
+    private static Socket socket;
+    private static OutputStream out;
+    private static PrintWriter output;
 
-    private Socket socket;
-    private OutputStream out;
-    private PrintWriter output;
+    private static boolean connencted = false;
+    private static boolean updated = false;
 
-    private boolean connencted = false;
-    private boolean updated = false;
+    static boolean wasStarted = false;
 
-    Connection(Context context)
+    Connection()
     {
-        this.context = context;
         connect();
         start();
     }
 
-    @Override
-    public void run() {
-        super.run();
-        while (true) {
-            if (updated) {
-                send("<" + leftX + "|" + leftY + "|" + rightX + "|" + rightY + ">");
-                updated = false;
-            }
-            try {sleep(coolDown);} catch (InterruptedException ignored) {}
+    static void start()
+    {
+        if (!wasStarted) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (true) {
+                        if (updated) {
+                            send("<" + leftX + "|" + leftY + "|" + rightX + "|" + rightY + ">");
+                            updated = false;
+                        }
+                        try {Thread.sleep(coolDown);} catch (InterruptedException ignored) {}
+                    }
+                }
+            });
+            thread.start();
+            wasStarted = true;
         }
     }
 
-    void setLeft(int leftX, int leftY)
+    static void checkConnection()
     {
-        this.leftX = leftX;
-        this.leftY = leftY;
+
+    }
+
+    static void setLeft(int leftX, int leftY)
+    {
+        Connection.leftX = leftX;
+        Connection.leftY = leftY;
         updated = true;
     }
 
-    void setRight(int rightX, int rightY)
+    static void setRight(int rightX, int rightY)
     {
-        this.rightX = rightX;
-        this.rightY = rightY;
+        Connection.rightX = rightX;
+        Connection.rightY = rightY;
         updated = true;
     }
 
-    public void connect()
+    public static void connect()
     {
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -80,7 +89,8 @@ class Connection extends Thread
         thread.start();
     }
 
-    void send(final String data) {
+    static void send(final String data)
+    {
         if (connencted) {
             Thread thread = new Thread(new Runnable() {
                 @Override
@@ -92,5 +102,10 @@ class Connection extends Thread
             });
             thread.start();
         }
+    }
+
+    static void sendCalibrate()
+    {
+        send("<command|calibrate>");
     }
 }

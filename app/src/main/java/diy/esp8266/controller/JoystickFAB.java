@@ -15,7 +15,6 @@ public class JoystickFAB extends FloatingActionButton {
     float posY;
 
     String position;
-    Connection connection;
 
     public JoystickFAB(Context context)
     {
@@ -35,20 +34,19 @@ public class JoystickFAB extends FloatingActionButton {
         setSpecificThings();
     }
 
-    public void setDefaultPosition(float x, float y, String position, Connection connection)
+    public void setDefaultPosition(float x, float y, String position)
     {
         this.position = position;
-        this.connection = connection;
         setX(x - ((float)getWidth() / 2));
         posX = x;
         if (position.equals("left")) {
             setY(y + RADIUS - ((float) getHeight() / 2));
             posY = y;
-            connection.setLeft(0, RADIUS);
+            Connection.setLeft(0, RADIUS);
         } else {
             setY(y - ((float) getHeight() / 2));
             posY = y;
-            connection.setRight(0, 0);
+            Connection.setRight(0, 0);
         }
 
     }
@@ -68,18 +66,18 @@ public class JoystickFAB extends FloatingActionButton {
                                 view.setX(event.getRawX() - ((float) view.getWidth() / 2));
                                 view.setY(event.getRawY() - ((float) view.getHeight() / 2));
                                 if (position.equals("left")) {
-                                    connection.setLeft(Math.round(event.getRawX() - posX), Math.round(event.getRawY() - posY));
+                                    Connection.setLeft(Math.round(event.getRawX() - posX), Math.round(event.getRawY() - posY));
                                 } else {
-                                    connection.setRight(Math.round(event.getRawX() - posX), Math.round(event.getRawY() - posY));
+                                    Connection.setRight(Math.round(event.getRawX() - posX), Math.round(event.getRawY() - posY));
                                 }
                             } else {
                                 float temp = (float) (RADIUS / Math.sqrt(Math.pow(event.getRawX() - posX, 2) + Math.pow(event.getRawY() - posY, 2)));
                                 view.setX(((event.getRawX() - posX) * temp) + posX - ((float) view.getWidth() / 2));
                                 view.setY(((event.getRawY() - posY) * temp) + posY - ((float) view.getHeight() / 2));
                                 if (position.equals("left")) {
-                                    connection.setLeft(Math.round((event.getRawX() - posX) * temp), Math.round((event.getRawY() - posY) * temp));
+                                    Connection.setLeft(Math.round((event.getRawX() - posX) * temp), Math.round((event.getRawY() - posY) * temp));
                                 } else {
-                                    connection.setRight(Math.round((event.getRawX() - posX) * temp), Math.round((event.getRawY() - posY) * temp));
+                                    Connection.setRight(Math.round((event.getRawX() - posX) * temp), Math.round((event.getRawY() - posY) * temp));
                                 }
                             }
                             break;
@@ -88,10 +86,10 @@ public class JoystickFAB extends FloatingActionButton {
                             view.setX(posX - ((float) getWidth() / 2));
                             if (position.equals("left")) {
                                 //Do not move posY!
-                                connection.setLeft(0, connection.leftY);
+                                Connection.setLeft(0, Connection.leftY);
                             } else {
                                 view.setY(posY - ((float) getHeight() / 2));
-                                connection.setRight(0, 0);
+                                Connection.setRight(0, 0);
                             }
 
                             view.performClick();

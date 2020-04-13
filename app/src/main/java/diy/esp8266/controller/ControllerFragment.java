@@ -24,29 +24,22 @@ public class ControllerFragment extends Fragment {
         view.post(new Runnable() {
             @Override
             public void run() {
-                Connection connection = new Connection(getContext());
+                Connection.start();
                 int padding = 250 + JoystickFAB.RADIUS;
                 JoystickFAB left = view.findViewById(R.id.joystick_left);
                 ImageView backLeft = view.findViewById(R.id.background_left);
                 JoystickFAB right = view.findViewById(R.id.joystick_right);
                 ImageView backRight = view.findViewById(R.id.background_right);
 
-                left.setDefaultPosition(padding, (float) view.getHeight() / 2, "left", connection);
+                left.setDefaultPosition(padding, (float) view.getHeight() / 2, "left");
                 backLeft.setX(padding - (float) backLeft.getWidth() / 2);
                 backLeft.setY((float) (view.getHeight() - backLeft.getHeight()) / 2);
 
-                right.setDefaultPosition(view.getWidth() - padding, (float) view.getHeight() / 2, "right", connection);
+                right.setDefaultPosition(view.getWidth() - padding, (float) view.getHeight() / 2, "right");
                 backRight.setX(view.getWidth() - padding - (float) backLeft.getWidth() / 2);
                 backRight.setY((float) (view.getHeight() - backLeft.getHeight()) / 2);
 
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-
     }
 }

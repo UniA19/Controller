@@ -9,19 +9,19 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+{
 
     Globals g = Globals.getInstance();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         // Use the chosen theme
+        Globals g = Globals.getInstance();
         if(g.getDark()) {
             setTheme(R.style.AppTheme_Dark_NoActionBar);
         }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -29,13 +29,15 @@ public class MainActivity extends AppCompatActivity {
         calibrationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Connection.sendCalibrate();
                 toController();
             }
         });
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
 
         View decorView = getWindow().getDecorView();
@@ -52,8 +54,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void  toController() {
+    private void  toController()
+    {
         Intent intent = new Intent(this, ControllerActivity.class);
+        finish();
         startActivity(intent);
     }
 
