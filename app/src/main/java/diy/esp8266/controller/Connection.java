@@ -10,7 +10,7 @@ class Connection
     private static final String HOSTIP = "192.168.4.1";
     private static final int PORT = 100;
 
-    static int leftX = 0, leftY = 0, rightX = 0, rightY = 0;
+    private static int leftX = 0, leftY = 0, rightX = 0, rightY = 0;
 
     private static final int coolDown = 150;
 
@@ -21,13 +21,7 @@ class Connection
     private static boolean connencted = false;
     private static boolean updated = false;
 
-    static boolean wasStarted = false;
-
-    Connection()
-    {
-        connect();
-        start();
-    }
+    private static boolean wasStarted = false;
 
     static void start()
     {
@@ -37,8 +31,13 @@ class Connection
                 public void run() {
                     while (true) {
                         checkConnection();
-                        if (updated) {
-                            send("<" + leftX + "|" + leftY + "|" + rightX + "|" + rightY + ">");
+                        if (updated && connencted) {
+                            String leftXSend, leftYSend, rightXSend, rightYSend;
+                            leftXSend = leftX >= 0 ? String.valueOf(leftX) : "+" + leftX;
+                            leftYSend = leftY >= 0 ? String.valueOf(leftY) : "+" + leftY;
+                            rightXSend = rightX >= 0 ? String.valueOf(rightX) : "+" + rightX;
+                            rightYSend = rightY >= 0 ? String.valueOf(rightY) : "+" + rightY;
+                            send("<" + leftXSend + "|" + leftYSend + "|" + rightXSend + "|" + rightYSend + ">");
                             updated = false;
                         }
                         try {Thread.sleep(coolDown);} catch (InterruptedException ignored) {}
@@ -50,7 +49,7 @@ class Connection
         }
     }
 
-    static void checkConnection()
+    private static void checkConnection()
     {
         try {
             InetAddress address = InetAddress.getByName(HOSTIP);
@@ -75,7 +74,7 @@ class Connection
     }
 
 
-    public static void connect()
+    private static void connect()
     {
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -109,6 +108,8 @@ class Connection
                 }
             });
             thread.start();
+        } else {
+            connect();
         }
     }
 

@@ -59,18 +59,18 @@ public class JoystickFAB extends FloatingActionButton {
                                 view.setX(event.getRawX() - ((float) view.getWidth() / 2));
                                 view.setY(event.getRawY() - ((float) view.getHeight() / 2));
                                 if (position.equals("left")) {
-                                    Connection.setLeft(Math.round(event.getRawX() - posX), Math.round(event.getRawY() - posY));
+                                    Connection.setLeft(Math.round((event.getRawX() - posX) * 100 / RADIUS), Math.round((event.getRawY() - posY)  * 100 / RADIUS));
                                 } else {
-                                    Connection.setRight(Math.round(event.getRawX() - posX), Math.round(event.getRawY() - posY));
+                                    Connection.setRight(Math.round((event.getRawX() - posX)  * 100 / RADIUS), Math.round((event.getRawY() - posY) * 100 / RADIUS));
                                 }
                             } else {
                                 float temp = (float) (RADIUS / Math.sqrt(Math.pow(event.getRawX() - posX, 2) + Math.pow(event.getRawY() - posY, 2)));
                                 view.setX(((event.getRawX() - posX) * temp) + posX - ((float) view.getWidth() / 2));
                                 view.setY(((event.getRawY() - posY) * temp) + posY - ((float) view.getHeight() / 2));
                                 if (position.equals("left")) {
-                                    Connection.setLeft(Math.round((event.getRawX() - posX) * temp), Math.round((event.getRawY() - posY) * temp));
+                                    Connection.setLeft(Math.round(((event.getRawX() - posX) * temp) * 100 / RADIUS), Math.round(((event.getRawY() - posY) * temp)) * 100 / RADIUS);
                                 } else {
-                                    Connection.setRight(Math.round((event.getRawX() - posX) * temp), Math.round((event.getRawY() - posY) * temp));
+                                    Connection.setRight(Math.round(((event.getRawX() - posX) * temp) * 100 / RADIUS), Math.round(((event.getRawY() - posY) * temp)) * 100 / RADIUS);
                                 }
                             }
                             break;
