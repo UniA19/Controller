@@ -106,6 +106,6 @@ class Connection
 
     static void sendCalibrate()
     {
-        send("<command|calibrate>");
+        send("<*cal>");
     }
 }
