@@ -35,10 +35,14 @@ class Connection
                         checkConnection();
                         if (updated && connencted) {
                             String leftXSend, leftYSend, rightXSend, rightYSend;
-                            leftXSend = leftX < 0 ? String.valueOf(leftX) : "+" + leftX;
-                            leftYSend = leftY < 0 ? String.valueOf(leftY) : "+" + leftY;
-                            rightXSend = rightX < 0 ? String.valueOf(rightX) : "+" + rightX;
-                            rightYSend = rightY < 0 ? String.valueOf(rightY) : "+" + rightY;
+                            leftXSend = String.format("%03d", leftX);
+                            leftYSend = String.format("%03d", leftY);
+                            rightXSend = String.format("%03d", rightX);
+                            rightYSend = String.format("%03d", rightY);
+                            leftXSend = (leftX < 0 ? "" : "+") + leftXSend;
+                            leftYSend = (leftY < 0 ? "" : "+") + leftYSend;
+                            rightXSend = (rightX < 0 ? "" : "+") + rightXSend;
+                            rightYSend = (rightY < 0 ? "" : "+") + rightYSend;
                             send("<" + leftXSend + "|" + leftYSend + "|" + rightXSend + "|" + rightYSend + ">");
                             updated = false;
                         }
