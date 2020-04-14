@@ -3,51 +3,78 @@ package diy.esp8266.controller;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity
-{
+public class MainActivity extends AppCompatActivity {
 
     Globals g = Globals.getInstance();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
+        CompoundButton.OnCheckedChangeListener listener = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton toggle, boolean isChecked) {
+                switch (toggle.getId()) {
+                    case R.id.darkmode_switch:
+                        g.setDark(isChecked);
+                        restartActivity();
+                        break;
+
+                    case R.id.debugmode_switch:
+                        g.setDebug(isChecked);
+                        break;
+
+                    case R.id.gamepad_switch:
+                        g.setGamepad(isChecked);
+                        break;
+                }
+            }
+        };
+
+        Connection.start();
+
         // Use the chosen theme
-        Globals g = Globals.getInstance();
-        if(g.getDark()) {
+        if (g.isDark()) {
             setTheme(R.style.AppTheme_Dark_NoActionBar);
         }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button calibrationButton = findViewById(R.id.calibrationButton);
+        Switch darkModeToggle = findViewById(R.id.darkmode_switch);
+        darkModeToggle.setChecked(g.isDark());
+        darkModeToggle.setOnCheckedChangeListener(listener);
+
+        Switch debugModeToggle = findViewById(R.id.debugmode_switch);
+        debugModeToggle.setChecked(g.isDebug());
+        debugModeToggle.setOnCheckedChangeListener(listener);
+
+        Switch gamepadToggle = findViewById(R.id.gamepad_switch);
+        gamepadToggle.setChecked(g.isGamepad());
+        gamepadToggle.setOnCheckedChangeListener(listener);
+
+        Button calibrationButton = findViewById(R.id.calibration_button);
         calibrationButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Connection.sendCalibrate();
+            public void onClick(View v) {
                 toController();
             }
         });
 
-        Button gamepadButton = findViewById(R.id.gamepadButton);
-        gamepadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toGamepad();
-            }
-        });
     }
 
+
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-        Connection.start();
+
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -62,15 +89,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void  toController()
-    {
+    private void toController() {
         Intent intent = new Intent(this, ControllerActivity.class);
         finish();
-        startActivity(intent);
-    }
-
-    private void toGamepad() {
-        Intent intent = new Intent(this, GamepadActivity.class);
         startActivity(intent);
     }
 

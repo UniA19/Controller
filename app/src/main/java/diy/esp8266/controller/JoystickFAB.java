@@ -16,36 +16,31 @@ public class JoystickFAB extends FloatingActionButton {
 
     String position;
 
-    public JoystickFAB(Context context)
-    {
+    public JoystickFAB(Context context) {
         super(context);
         setSpecificThings();
     }
 
-    public JoystickFAB(Context context, AttributeSet attrs)
-    {
+    public JoystickFAB(Context context, AttributeSet attrs) {
         super(context, attrs);
         setSpecificThings();
     }
 
-    public JoystickFAB(Context context, AttributeSet attrs, int defStyleAttr)
-    {
+    public JoystickFAB(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setSpecificThings();
     }
 
-    public void setDefaultPosition(float x, float y, String position)
-    {
+    public void setDefaultPosition(float x, float y, String position) {
         this.position = position;
-        setX(x - ((float)getWidth() / 2));
+        setX(x - ((float) getWidth() / 2));
         posX = x;
         setY(y - ((float) getHeight() / 2));
         posY = y;
         Connection.setRight(0, 0);
     }
 
-    private void setSpecificThings()
-    {
+    private void setSpecificThings() {
         setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
@@ -59,9 +54,9 @@ public class JoystickFAB extends FloatingActionButton {
                                 view.setX(event.getRawX() - ((float) view.getWidth() / 2));
                                 view.setY(event.getRawY() - ((float) view.getHeight() / 2));
                                 if (position.equals("left")) {
-                                    Connection.setLeft(Math.round((event.getRawX() - posX) * 100 / RADIUS), Math.round((event.getRawY() - posY)  * 100 / RADIUS) * -1);
+                                    Connection.setLeft(Math.round((event.getRawX() - posX) * 100 / RADIUS), Math.round((event.getRawY() - posY) * 100 / RADIUS) * -1);
                                 } else {
-                                    Connection.setRight(Math.round((event.getRawX() - posX)  * 100 / RADIUS), Math.round((event.getRawY() - posY) * 100 / RADIUS) * -1);
+                                    Connection.setRight(Math.round((event.getRawX() - posX) * 100 / RADIUS), Math.round((event.getRawY() - posY) * 100 / RADIUS) * -1);
                                 }
                             } else {
                                 float temp = (float) (RADIUS / Math.sqrt(Math.pow(event.getRawX() - posX, 2) + Math.pow(event.getRawY() - posY, 2)));
