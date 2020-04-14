@@ -17,8 +17,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Connection.start();
-
         // Use the chosen theme
         Globals g = Globals.getInstance();
         if(g.getDark()) {
@@ -49,7 +47,7 @@ public class MainActivity extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
-
+        Connection.start();
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY

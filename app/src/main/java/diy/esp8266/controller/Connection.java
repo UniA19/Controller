@@ -33,35 +33,17 @@ class Connection
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    int i = 0;
                     while (true) {
                         checkConnection();
-                        if (updated && connencted) {
-                            String leftXSend, leftYSend, rightXSend, rightYSend;
-                            if (leftX < 0) {
-                                leftXSend = String.format("%04d", leftX);
-                            } else {
-                                leftXSend = "+" + String.format("%03d", leftX);
-                            }
-                            if (leftY < 0) {
-                                leftYSend = String.format("%04d", leftY);
-                            } else {
-                                leftYSend = "+" + String.format("%03d", leftY);
-                            }
-                            if (rightX < 0) {
-                                rightXSend = String.format("%04d", rightX);
-                            } else {
-                                rightXSend = "+" + String.format("%03d", rightX);
-                            }
-                            if (rightY < 0) {
-                                rightYSend = String.format("%04d", rightY);
-                            } else {
-                                rightYSend = "+" + String.format("%03d", rightY);
-                            }
-
-                            send("<" + leftXSend + "|" + leftYSend + "|" + rightXSend + "|" + rightYSend + ">");
+                        boolean dontTimeOut = i * coolDown > 1000;//send every second (not exact)
+                        if (updated || dontTimeOut) {
+                            send("<" + format(leftX) + "|" + format(leftY) + "|" + format(rightX) + "|" + format(rightY) + ">");
                             updated = false;
+                            i = 0;
                         }
                         try {Thread.sleep(coolDown);} catch (InterruptedException ignored) {}
+                        ++i;
                     }
                 }
             });
@@ -73,10 +55,11 @@ class Connection
     {
         try {
             InetAddress address = InetAddress.getByName(HOSTIP);
-            connencted = address.isReachable(100);
+            connencted = connencted && socket.isConnected() && address.isReachable(100);
         } catch (Exception ex) {
             connencted = false;
         }
+        System.out.println("Connected: " + connencted);
     }
 
     static void setLeft(int leftX, int leftY)
@@ -96,37 +79,39 @@ class Connection
     }
 
     static void printToLog () {
-        String leftXSend, leftYSend, rightXSend, rightYSend;
-        leftXSend = String.format("%03d", leftX);
-        leftYSend = String.format("%03d", leftY);
-        rightXSend = String.format("%03d", rightX);
-        rightYSend = String.format("%03d", rightY);
-        leftXSend = (leftX < 0 ? "" : "+") + leftXSend;
-        leftYSend = (leftY < 0 ? "" : "+") + leftYSend;
-        rightXSend = (rightX < 0 ? "" : "+") + rightXSend;
-        rightYSend = (rightY < 0 ? "" : "+") + rightYSend;
-        Log.d("Input:", "<" + leftXSend + "|" + leftYSend + "|" + rightXSend + "|" + rightYSend + ">");
+        Log.d("Input:", "<" + format(leftX) + "|" + format(leftY) + "|" + format(rightX) + "|" + format(rightY) + ">");
     }
     private static void connect()
     {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (output != null) output.close();
-                    if (out != null) out.close();
-                    if (socket != null) socket.close();
-                    socket = new Socket(HOSTIP, PORT);
-                    out = socket.getOutputStream();
-                    output = new PrintWriter(out);
-                    connencted = true;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    connencted = false;
+        checkConnection();
+        if (!connencted) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        InetAddress address = InetAddress.getByName(HOSTIP);
+                        if (address.isReachable(100)) {
+                            if (output != null) output.close();
+                            if (out != null) out.close();
+                            if (socket != null) socket.close();
+                            socket = new Socket(HOSTIP, PORT);
+                            out = socket.getOutputStream();
+                            output = new PrintWriter(out);
+                            connencted = true;
+                            checkConnection();
+                        }
+                    } catch (Exception e) {
+                        System.out.println("------------------------------------------------------------------------------------------------------------------");
+                        System.out.println("------------------------------------------------------------------------------------------------------------------");
+                        e.printStackTrace();
+                        System.out.println("------------------------------------------------------------------------------------------------------------------");
+                        System.out.println("------------------------------------------------------------------------------------------------------------------");
+                        connencted = false;
+                    }
                 }
-            }
-        });
-        thread.start();
+            });
+            thread.start();
+        }
     }
 
     static void send(final String data)
@@ -149,5 +134,14 @@ class Connection
     static void sendCalibrate()
     {
         send("<*cal>");
+    }
+
+    static String format(int i)
+    {
+        if (i < 0) {
+            return String.format("%04d", i);
+        } else {
+            return "+" + String.format("%03d", i);
+        }
     }
 }
