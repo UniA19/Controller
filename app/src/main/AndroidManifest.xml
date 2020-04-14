@@ -13,11 +13,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ControllerActivity"
+        <activity
+            android:name=".GamepadActivity"
+            android:screenOrientation="landscape"
             android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".ControllerActivity"
+            android:screenOrientation="landscape"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
+            android:screenOrientation="landscape"
             android:parentActivityName=".ControllerActivity" />
         <activity
             android:name=".MainActivity"
