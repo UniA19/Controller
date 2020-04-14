@@ -41,11 +41,13 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void toggleTheme(boolean darkTheme) {
         g.setDark(darkTheme);
+        restartActivity();
+    }
 
+    private void restartActivity() {
         Intent intent = getIntent();
         finish();
 
         startActivity(intent);
     }
-
 }

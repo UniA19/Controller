@@ -1,5 +1,7 @@
 package diy.esp8266.controller;
 
+import android.util.Log;
+
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
@@ -82,6 +84,7 @@ class Connection
         Connection.leftX = leftX;
         Connection.leftY = leftY;
         updated = true;
+        printToLog();
     }
 
     static void setRight(int rightX, int rightY)
@@ -89,9 +92,21 @@ class Connection
         Connection.rightX = rightX;
         Connection.rightY = rightY;
         updated = true;
+        printToLog();
     }
 
-
+    static void printToLog () {
+        String leftXSend, leftYSend, rightXSend, rightYSend;
+        leftXSend = String.format("%03d", leftX);
+        leftYSend = String.format("%03d", leftY);
+        rightXSend = String.format("%03d", rightX);
+        rightYSend = String.format("%03d", rightY);
+        leftXSend = (leftX < 0 ? "" : "+") + leftXSend;
+        leftYSend = (leftY < 0 ? "" : "+") + leftYSend;
+        rightXSend = (rightX < 0 ? "" : "+") + rightXSend;
+        rightYSend = (rightY < 0 ? "" : "+") + rightYSend;
+        Log.d("Input:", "<" + leftXSend + "|" + leftYSend + "|" + rightXSend + "|" + rightYSend + ">");
+    }
     private static void connect()
     {
         Thread thread = new Thread(new Runnable() {

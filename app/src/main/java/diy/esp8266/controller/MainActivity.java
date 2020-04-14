@@ -35,6 +35,14 @@ public class MainActivity extends AppCompatActivity
                 toController();
             }
         });
+
+        Button gamepadButton = findViewById(R.id.gamepadButton);
+        gamepadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toGamepad();
+            }
+        });
     }
 
     @Override
@@ -60,6 +68,18 @@ public class MainActivity extends AppCompatActivity
     {
         Intent intent = new Intent(this, ControllerActivity.class);
         finish();
+        startActivity(intent);
+    }
+
+    private void toGamepad() {
+        Intent intent = new Intent(this, GamepadActivity.class);
+        startActivity(intent);
+    }
+
+    private void restartActivity() {
+        Intent intent = getIntent();
+        finish();
+
         startActivity(intent);
     }
 

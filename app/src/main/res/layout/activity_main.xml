@@ -12,6 +12,16 @@ android:layout_height="wrap_content">
     android:layout_gravity="center"
     android:background="@drawable/defaultbutton"
     android:text="Calibrate"
-    android:textColor="@color/colorBackgroundLight" />
+    android:textColor="@color/colorBackgroundLight"
+    android:layout_marginBottom="24dp"/>
+
+    <Button
+        android:id="@+id/gamepadButton"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:background="@drawable/defaultbutton"
+        android:text="Connect Gamepad"
+        android:textColor="@color/colorBackgroundLight" />
 
 </LinearLayout>
