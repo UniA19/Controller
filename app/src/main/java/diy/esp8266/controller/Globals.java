@@ -19,7 +19,7 @@ public class Globals {
     }
 
     public boolean isDark() {
-        return dark;
+        return this.dark;
     }
 
     public void setDebug(boolean debug) {
@@ -27,7 +27,7 @@ public class Globals {
     }
 
     public boolean isDebug() {
-        return debug;
+        return this.debug;
     }
 
     public void setGamepad(boolean gamepad) {
@@ -35,7 +35,7 @@ public class Globals {
     }
 
     public boolean isGamepad() {
-        return gamepad;
+        return this.gamepad;
     }
 
     public static synchronized Globals getInstance(){
@@ -45,5 +45,4 @@ public class Globals {
         return instance;
     }
 
-    public void set
 }

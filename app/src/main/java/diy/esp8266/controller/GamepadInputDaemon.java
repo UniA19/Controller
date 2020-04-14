@@ -6,7 +6,7 @@ import android.view.MotionEvent;
 public class GamepadInputDaemon {
 
     static void processJoystickInput(MotionEvent event,
-                                      int historyPos) {
+                                      int historyPos, boolean debug) {
 
         InputDevice inputDevice = event.getDevice();
 
@@ -24,6 +24,10 @@ public class GamepadInputDaemon {
 
         Connection.setLeft(convert(lx), convert(ly));
         Connection.setRight(convert(rx), convert(ry));
+
+        if (debug) {
+            Connection.printToLog();
+        }
     }
 
     private static float getCenteredAxis(MotionEvent event,

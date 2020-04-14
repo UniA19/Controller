@@ -3,6 +3,8 @@ package diy.esp8266.controller;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.InputDevice;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -12,26 +14,19 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ControllerActivity extends AppCompatActivity
 {
+    Globals g = Globals.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         // Use the chosen theme
-        Globals g = Globals.getInstance();
-        if(g.getDark()) {
+        if(g.isDark()) {
             setTheme(R.style.AppTheme_Dark_NoActionBar);
         }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_controller);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toSettings();
-            }
-        });
         FloatingActionButton back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,10 +55,30 @@ public class ControllerActivity extends AppCompatActivity
         }
     }
 
-    private void toSettings()
-    {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
+    @Override
+    public boolean onGenericMotionEvent(MotionEvent event) {
+        if (g.isGamepad()) {
+            // Check that the event came from a game controller
+            if ((event.getSource() & InputDevice.SOURCE_JOYSTICK) ==
+                    InputDevice.SOURCE_JOYSTICK &&
+                    event.getAction() == MotionEvent.ACTION_MOVE) {
+
+                // Process all historical movement samples in the batch
+                final int historySize = event.getHistorySize();
+
+                // Process the movements starting from the
+                // earliest historical position in the batch
+                for (int i = 0; i < historySize; i++) {
+                    // Process the event at historical position i
+                    GamepadInputDaemon.processJoystickInput(event, i, g.isDebug());
+                }
+
+                // Process the current movement sample in the batch (position -1)
+                GamepadInputDaemon.processJoystickInput(event, -1, g.isDebug());
+                return true;
+            }
+        }
+        return super.onGenericMotionEvent(event);
     }
 
     private void  toCalibration()

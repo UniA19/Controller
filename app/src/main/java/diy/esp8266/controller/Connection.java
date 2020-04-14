@@ -71,7 +71,6 @@ class Connection
         Connection.leftX = leftX;
         Connection.leftY = leftY;
         updated = true;
-        printToLog();
     }
 
     static void setRight(int rightX, int rightY)
@@ -79,7 +78,6 @@ class Connection
         Connection.rightX = rightX;
         Connection.rightY = rightY;
         updated = true;
-        printToLog();
     }
 
     static void printToLog () {

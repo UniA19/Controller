@@ -46,9 +46,12 @@
                     android:textColor="@color/colorDarkText"
                     android:textSize="16sp"
                     android:layout_marginRight="20dp"
+                    android:layout_gravity="left"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"/>
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/darkmode_switch"
+                    app:layout_constraintHorizontal_bias="0"/>
 
                 <Switch
                     android:id="@+id/darkmode_switch"
@@ -76,9 +79,11 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/debug_switch"/>
+                    app:layout_constraintRight_toLeftOf="@id/debugmode_switch"
+                    app:layout_constraintHorizontal_bias="0"/>
+
                 <Switch
-                    android:id="@+id/debug_switch"
+                    android:id="@+id/debugmode_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:thumb="@drawable/thumb"
@@ -102,7 +107,10 @@
                     android:layout_marginRight="20dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"/>
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/gamepad_switch"
+                    app:layout_constraintHorizontal_bias="0"/>
+
                 <Switch
                     android:id="@+id/gamepad_switch"
                     android:layout_width="wrap_content"
@@ -117,6 +125,7 @@
         </LinearLayout>
 
         <Button
+            android:id="@+id/calibration_button"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
