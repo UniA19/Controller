@@ -3,7 +3,6 @@ package diy.esp8266.controller;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -37,8 +36,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-
-        Connection.start();
 
         // Use the chosen theme
         if (g.isDark()) {
@@ -74,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        Connection.start();
 
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
