@@ -35,14 +35,27 @@ class Connection
                         checkConnection();
                         if (updated && connencted) {
                             String leftXSend, leftYSend, rightXSend, rightYSend;
-                            leftXSend = String.format("%03d", leftX);
-                            leftYSend = String.format("%03d", leftY);
-                            rightXSend = String.format("%03d", rightX);
-                            rightYSend = String.format("%03d", rightY);
-                            leftXSend = (leftX < 0 ? "" : "+") + leftXSend;
-                            leftYSend = (leftY < 0 ? "" : "+") + leftYSend;
-                            rightXSend = (rightX < 0 ? "" : "+") + rightXSend;
-                            rightYSend = (rightY < 0 ? "" : "+") + rightYSend;
+                            if (leftX < 0) {
+                                leftXSend = String.format("%04d", leftX);
+                            } else {
+                                leftXSend = "+" + String.format("%03d", leftX);
+                            }
+                            if (leftY < 0) {
+                                leftYSend = String.format("%04d", leftY);
+                            } else {
+                                leftYSend = "+" + String.format("%03d", leftY);
+                            }
+                            if (rightX < 0) {
+                                rightXSend = String.format("%04d", rightX);
+                            } else {
+                                rightXSend = "+" + String.format("%03d", rightX);
+                            }
+                            if (rightY < 0) {
+                                rightYSend = String.format("%04d", rightY);
+                            } else {
+                                rightYSend = "+" + String.format("%03d", rightY);
+                            }
+
                             send("<" + leftXSend + "|" + leftYSend + "|" + rightXSend + "|" + rightYSend + ">");
                             updated = false;
                         }
