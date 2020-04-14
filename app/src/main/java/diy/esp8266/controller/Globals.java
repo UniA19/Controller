@@ -38,9 +38,9 @@ public class Globals {
         return this.gamepad;
     }
 
-    public static synchronized Globals getInstance(){
-        if(instance==null){
-            instance=new Globals();
+    public static synchronized Globals getInstance() {
+        if (instance == null) {
+            instance = new Globals();
         }
         return instance;
     }

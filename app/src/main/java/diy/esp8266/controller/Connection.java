@@ -7,8 +7,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
-class Connection
-{
+class Connection {
     private static final String HOSTIP = "192.168.4.1";
     private static final int PORT = 100;
 
@@ -25,8 +24,7 @@ class Connection
 
     private static boolean wasStarted = false;
 
-    static void start()
-    {
+    static void start() {
         if (!wasStarted) {
             wasStarted = true;
             connect();
@@ -61,7 +59,10 @@ class Connection
                             send("<" + leftXSend + "|" + leftYSend + "|" + rightXSend + "|" + rightYSend + ">");
                             updated = false;
                         }
-                        try {Thread.sleep(coolDown);} catch (InterruptedException ignored) {}
+                        try {
+                            Thread.sleep(coolDown);
+                        } catch (InterruptedException ignored) {
+                        }
                     }
                 }
             });
@@ -69,8 +70,7 @@ class Connection
         }
     }
 
-    private static void checkConnection()
-    {
+    private static void checkConnection() {
         try {
             InetAddress address = InetAddress.getByName(HOSTIP);
             connencted = address.isReachable(100);
@@ -79,21 +79,19 @@ class Connection
         }
     }
 
-    static void setLeft(int leftX, int leftY)
-    {
+    static void setLeft(int leftX, int leftY) {
         Connection.leftX = leftX;
         Connection.leftY = leftY;
         updated = true;
     }
 
-    static void setRight(int rightX, int rightY)
-    {
+    static void setRight(int rightX, int rightY) {
         Connection.rightX = rightX;
         Connection.rightY = rightY;
         updated = true;
     }
 
-    static void printToLog () {
+    static void printToLog() {
         String leftXSend, leftYSend, rightXSend, rightYSend;
         leftXSend = String.format("%03d", leftX);
         leftYSend = String.format("%03d", leftY);
@@ -105,8 +103,8 @@ class Connection
         rightYSend = (rightY < 0 ? "" : "+") + rightYSend;
         Log.d("Input:", "<" + leftXSend + "|" + leftYSend + "|" + rightXSend + "|" + rightYSend + ">");
     }
-    private static void connect()
-    {
+
+    private static void connect() {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -127,8 +125,7 @@ class Connection
         thread.start();
     }
 
-    static void send(final String data)
-    {
+    static void send(final String data) {
         if (connencted) {
             Thread thread = new Thread(new Runnable() {
                 @Override
@@ -144,8 +141,7 @@ class Connection
         }
     }
 
-    static void sendCalibrate()
-    {
+    static void sendCalibrate() {
         send("<*cal>");
     }
 }

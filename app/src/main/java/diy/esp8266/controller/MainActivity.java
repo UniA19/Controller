@@ -12,18 +12,16 @@ import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity
-{
+public class MainActivity extends AppCompatActivity {
 
     Globals g = Globals.getInstance();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         CompoundButton.OnCheckedChangeListener listener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton toggle, boolean isChecked) {
-                switch (toggle.getId()){
+                switch (toggle.getId()) {
                     case R.id.darkmode_switch:
                         g.setDark(isChecked);
                         restartActivity();
@@ -31,7 +29,6 @@ public class MainActivity extends AppCompatActivity
 
                     case R.id.debugmode_switch:
                         g.setDebug(isChecked);
-                        Log.d("toggle", "debug");
                         break;
 
                     case R.id.gamepad_switch:
@@ -44,7 +41,7 @@ public class MainActivity extends AppCompatActivity
         Connection.start();
 
         // Use the chosen theme
-        if(g.isDark()) {
+        if (g.isDark()) {
             setTheme(R.style.AppTheme_Dark_NoActionBar);
         }
 
@@ -57,7 +54,7 @@ public class MainActivity extends AppCompatActivity
 
         Switch debugModeToggle = findViewById(R.id.debugmode_switch);
         debugModeToggle.setChecked(g.isDebug());
-        darkModeToggle.setOnCheckedChangeListener(listener);
+        debugModeToggle.setOnCheckedChangeListener(listener);
 
         Switch gamepadToggle = findViewById(R.id.gamepad_switch);
         gamepadToggle.setChecked(g.isGamepad());
@@ -67,15 +64,15 @@ public class MainActivity extends AppCompatActivity
         calibrationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toController();            }
+                toController();
+            }
         });
 
     }
 
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
 
         View decorView = getWindow().getDecorView();
@@ -92,8 +89,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void  toController()
-    {
+    private void toController() {
         Intent intent = new Intent(this, ControllerActivity.class);
         finish();
         startActivity(intent);

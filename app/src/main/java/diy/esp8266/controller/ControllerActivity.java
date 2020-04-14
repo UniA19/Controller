@@ -12,15 +12,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class ControllerActivity extends AppCompatActivity
-{
+public class ControllerActivity extends AppCompatActivity {
     Globals g = Globals.getInstance();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         // Use the chosen theme
-        if(g.isDark()) {
+        if (g.isDark()) {
             setTheme(R.style.AppTheme_Dark_NoActionBar);
         }
 
@@ -37,8 +35,7 @@ public class ControllerActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
 
         View decorView = getWindow().getDecorView();
@@ -81,8 +78,7 @@ public class ControllerActivity extends AppCompatActivity
         return super.onGenericMotionEvent(event);
     }
 
-    private void  toCalibration()
-    {
+    private void toCalibration() {
         Intent intent = new Intent(this, MainActivity.class);
         finish();
         startActivity(intent);

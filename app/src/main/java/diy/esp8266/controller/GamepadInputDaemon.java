@@ -6,7 +6,7 @@ import android.view.MotionEvent;
 public class GamepadInputDaemon {
 
     static void processJoystickInput(MotionEvent event,
-                                      int historyPos, boolean debug) {
+                                     int historyPos, boolean debug) {
 
         InputDevice inputDevice = event.getDevice();
 
@@ -41,7 +41,7 @@ public class GamepadInputDaemon {
         if (range != null) {
             final float flat = range.getFlat();
             final float value =
-                    historyPos < 0 ? event.getAxisValue(axis):
+                    historyPos < 0 ? event.getAxisValue(axis) :
                             event.getHistoricalAxisValue(axis, historyPos);
 
             // Ignore axis values that are within the 'flat' region of the
@@ -55,7 +55,7 @@ public class GamepadInputDaemon {
 
     static int convert(float input) {
         float i = 100 * input;
-        return  (int) i;
+        return (int) i;
     }
 
 }
