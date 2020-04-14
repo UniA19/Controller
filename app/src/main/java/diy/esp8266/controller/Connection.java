@@ -26,6 +26,8 @@ class Connection
     static void start()
     {
         if (!wasStarted) {
+            wasStarted = true;
+            connect();
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -33,10 +35,10 @@ class Connection
                         checkConnection();
                         if (updated && connencted) {
                             String leftXSend, leftYSend, rightXSend, rightYSend;
-                            leftXSend = leftX >= 0 ? String.valueOf(leftX) : "+" + leftX;
-                            leftYSend = leftY >= 0 ? String.valueOf(leftY) : "+" + leftY;
-                            rightXSend = rightX >= 0 ? String.valueOf(rightX) : "+" + rightX;
-                            rightYSend = rightY >= 0 ? String.valueOf(rightY) : "+" + rightY;
+                            leftXSend = leftX < 0 ? String.valueOf(leftX) : "+" + leftX;
+                            leftYSend = leftY < 0 ? String.valueOf(leftY) : "+" + leftY;
+                            rightXSend = rightX < 0 ? String.valueOf(rightX) : "+" + rightX;
+                            rightYSend = rightY < 0 ? String.valueOf(rightY) : "+" + rightY;
                             send("<" + leftXSend + "|" + leftYSend + "|" + rightXSend + "|" + rightYSend + ">");
                             updated = false;
                         }
@@ -45,7 +47,6 @@ class Connection
                 }
             });
             thread.start();
-            wasStarted = true;
         }
     }
 

@@ -24,7 +24,6 @@ public class ControllerFragment extends Fragment {
         view.post(new Runnable() {
             @Override
             public void run() {
-                Connection.start();
                 int padding = 250 + JoystickFAB.RADIUS;
                 JoystickFAB left = view.findViewById(R.id.joystick_left);
                 ImageView backLeft = view.findViewById(R.id.background_left);

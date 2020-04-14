@@ -17,6 +17,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        Connection.start();
+
         // Use the chosen theme
         Globals g = Globals.getInstance();
         if(g.getDark()) {
