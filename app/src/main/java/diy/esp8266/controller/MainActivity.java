@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,27 +22,19 @@ public class MainActivity extends AppCompatActivity
         Connection.start();
 
         // Use the chosen theme
-        Globals g = Globals.getInstance();
         if(g.getDark()) {
             setTheme(R.style.AppTheme_Dark_NoActionBar);
         }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button calibrationButton = findViewById(R.id.calibrationButton);
-        calibrationButton.setOnClickListener(new View.OnClickListener() {
+        Switch darkModeToggle = findViewById(R.id.darkmode_switch);
+        darkModeToggle.setChecked(g.getDark());
+        darkModeToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-                Connection.sendCalibrate();
-                toController();
-            }
-        });
-
-        Button gamepadButton = findViewById(R.id.gamepadButton);
-        gamepadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toGamepad();
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                toggleTheme(isChecked);
             }
         });
     }
@@ -74,6 +68,11 @@ public class MainActivity extends AppCompatActivity
     private void toGamepad() {
         Intent intent = new Intent(this, GamepadActivity.class);
         startActivity(intent);
+    }
+
+    private void toggleTheme(boolean darkTheme) {
+        g.setDark(darkTheme);
+        restartActivity();
     }
 
     private void restartActivity() {
