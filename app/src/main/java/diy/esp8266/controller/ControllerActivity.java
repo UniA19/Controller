@@ -1,6 +1,7 @@
 package diy.esp8266.controller;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.InputDevice;
@@ -12,13 +13,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import static diy.esp8266.controller.MainActivity.IS_DARK;
+import static diy.esp8266.controller.MainActivity.IS_DEBUG;
+import static diy.esp8266.controller.MainActivity.IS_GAMEPAD;
+import static diy.esp8266.controller.MainActivity.PREFS_GLOBALS;
+
 public class ControllerActivity extends AppCompatActivity {
-    Globals g = Globals.getInstance();
+
+    SharedPreferences globals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        globals = getApplicationContext().getSharedPreferences(PREFS_GLOBALS, 0);
         // Use the chosen theme
-        if (g.isDark()) {
+        if (globals.getBoolean(IS_DARK, false)) {
             setTheme(R.style.AppTheme_Dark_NoActionBar);
         }
 
@@ -53,8 +61,9 @@ public class ControllerActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onGenericMotionEvent(MotionEvent event) {
-        if (g.isGamepad()) {
+    public boolean onGenericMotionEvent(MotionEvent event)
+    {
+        if (globals.getBoolean(IS_GAMEPAD, false)) {
             // Check that the event came from a game controller
             if ((event.getSource() & InputDevice.SOURCE_JOYSTICK) ==
                     InputDevice.SOURCE_JOYSTICK &&
@@ -67,27 +76,28 @@ public class ControllerActivity extends AppCompatActivity {
                 // earliest historical position in the batch
                 for (int i = 0; i < historySize; i++) {
                     // Process the event at historical position i
-                    GamepadInputDaemon.processJoystickInput(event, i, g.isDebug());
+                    GamepadInputDaemon.processJoystickInput(event, i, globals.getBoolean(IS_DEBUG, false));
                 }
 
                 // Process the current movement sample in the batch (position -1)
-                GamepadInputDaemon.processJoystickInput(event, -1, g.isDebug());
+                GamepadInputDaemon.processJoystickInput(event, -1, globals.getBoolean(IS_DEBUG, false));
                 return true;
             }
         }
         return super.onGenericMotionEvent(event);
     }
 
-    private void toCalibration() {
+    private void toCalibration()
+    {
         Intent intent = new Intent(this, MainActivity.class);
         finish();
         startActivity(intent);
     }
 
-    private void restartActivity() {
+    private void restartActivity()
+    {
         Intent intent = getIntent();
         finish();
-
         startActivity(intent);
     }
 

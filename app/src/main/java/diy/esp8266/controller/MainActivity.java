@@ -1,6 +1,7 @@
 package diy.esp8266.controller;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -13,48 +14,59 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    Globals g = Globals.getInstance();
+    public static final String PREFS_GLOBALS = "prefsGlobals";
+    public static final String IS_GAMEPAD = "isGamepad";
+    public static final String IS_DARK = "isDark";
+    public static final String IS_DEBUG = "isDebug";
+
+    SharedPreferences globals;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        globals = getApplicationContext().getSharedPreferences(PREFS_GLOBALS, 0);
+        editor = globals.edit();
+
         CompoundButton.OnCheckedChangeListener listener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton toggle, boolean isChecked) {
                 switch (toggle.getId()) {
                     case R.id.darkmode_switch:
-                        g.setDark(isChecked);
+                        editor.putBoolean(IS_DARK, isChecked);
+                        editor.apply();
                         restartActivity();
                         break;
 
                     case R.id.debugmode_switch:
-                        g.setDebug(isChecked);
+                        editor.putBoolean(IS_DEBUG, isChecked);
+                        editor.apply();
                         break;
 
                     case R.id.gamepad_switch:
-                        g.setGamepad(isChecked);
+                        editor.putBoolean(IS_GAMEPAD, isChecked);
+                        editor.apply();
                         break;
                 }
             }
         };
 
         // Use the chosen theme
-        if (g.isDark()) {
+        if (globals.getBoolean(IS_DARK, false)) {
             setTheme(R.style.AppTheme_Dark_NoActionBar);
         }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Switch darkModeToggle = findViewById(R.id.darkmode_switch);
-        darkModeToggle.setChecked(g.isDark());
+        darkModeToggle.setChecked(globals.getBoolean(IS_DARK, false));
         darkModeToggle.setOnCheckedChangeListener(listener);
 
         Switch debugModeToggle = findViewById(R.id.debugmode_switch);
-        debugModeToggle.setChecked(g.isDebug());
+        debugModeToggle.setChecked(globals.getBoolean(IS_DEBUG, false));
         debugModeToggle.setOnCheckedChangeListener(listener);
 
         Switch gamepadToggle = findViewById(R.id.gamepad_switch);
-        gamepadToggle.setChecked(g.isGamepad());
+        gamepadToggle.setChecked(globals.getBoolean(IS_GAMEPAD, false));
         gamepadToggle.setOnCheckedChangeListener(listener);
 
         Button calibrationButton = findViewById(R.id.calibration_button);

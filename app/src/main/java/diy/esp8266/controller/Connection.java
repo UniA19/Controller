@@ -78,7 +78,8 @@ class Connection
         printToLog();
     }
 
-    static void printToLog () {
+    static void printToLog ()
+    {
         Log.d("Input:", "<" + format(leftX) + "|" + format(leftY) + "|" + format(rightX) + "|" + format(rightY) + ">");
     }
     private static void connect()
