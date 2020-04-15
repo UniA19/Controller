@@ -18,12 +18,14 @@ import static diy.esp8266.controller.MainActivity.IS_DEBUG;
 import static diy.esp8266.controller.MainActivity.IS_GAMEPAD;
 import static diy.esp8266.controller.MainActivity.PREFS_GLOBALS;
 
-public class ControllerActivity extends AppCompatActivity {
+public class ControllerActivity extends AppCompatActivity
+{
 
     SharedPreferences globals;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         globals = getApplicationContext().getSharedPreferences(PREFS_GLOBALS, 0);
         // Use the chosen theme
         if (globals.getBoolean(IS_DARK, false)) {
@@ -43,7 +45,8 @@ public class ControllerActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
 
         View decorView = getWindow().getDecorView();
@@ -90,13 +93,6 @@ public class ControllerActivity extends AppCompatActivity {
     private void toCalibration()
     {
         Intent intent = new Intent(this, MainActivity.class);
-        finish();
-        startActivity(intent);
-    }
-
-    private void restartActivity()
-    {
-        Intent intent = getIntent();
         finish();
         startActivity(intent);
     }

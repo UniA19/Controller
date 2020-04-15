@@ -23,7 +23,7 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Controller Ui Concept"
+            android:text="@string/main_title"
             android:textColor="@color/colorLightText"
             android:textSize="24dp"
             android:layout_marginBottom="36dp" />
@@ -42,7 +42,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Use Darkmode"
+                    android:text="@string/main_switch_darkmode"
                     android:textColor="@color/colorDarkText"
                     android:textSize="16sp"
                     android:layout_marginRight="20dp"
@@ -72,7 +72,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Start in Debug-Mode"
+                    android:text="@string/main_switch_debugmode"
                     android:textColor="@color/colorDarkText"
                     android:textSize="16sp"
                     android:layout_marginRight="20dp"
@@ -101,7 +101,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Use Gamepad Input"
+                    android:text="@string/main_switch_gamepadmode"
                     android:textColor="@color/colorDarkText"
                     android:textSize="16sp"
                     android:layout_marginRight="20dp"

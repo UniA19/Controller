@@ -3,7 +3,7 @@ package diy.esp8266.controller;
 import android.view.InputDevice;
 import android.view.MotionEvent;
 
-public class GamepadInputDaemon {
+class GamepadInputDaemon {
 
     static void processJoystickInput(MotionEvent event,
                                      int historyPos, boolean debug) {
@@ -53,7 +53,7 @@ public class GamepadInputDaemon {
         return 0;
     }
 
-    static int convert(float input) {
+    private static int convert(float input) {
         float i = 100 * input;
         return (int) i;
     }

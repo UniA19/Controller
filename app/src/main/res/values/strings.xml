@@ -27,4 +27,8 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="main_title">Controller Ui Concept</string>
+    <string name="main_switch_darkmode">Use Darkmode</string>
+    <string name="main_switch_debugmode">Start in Debug-Mode</string>
+    <string name="main_switch_gamepadmode">Use Gamepad Input</string>
 </resources>

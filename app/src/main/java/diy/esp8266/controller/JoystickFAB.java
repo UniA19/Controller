@@ -7,31 +7,35 @@ import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class JoystickFAB extends FloatingActionButton {
+public class JoystickFAB extends FloatingActionButton
+{
 
     public static final int RADIUS = 150; //is also in fragment_controlleroller.xml
-    public static final int SIZE = 60; //is also in fragment_controller.xmlr.xml
     float posX;
     float posY;
 
     String position;
 
-    public JoystickFAB(Context context) {
+    public JoystickFAB(Context context)
+    {
         super(context);
         setSpecificThings();
     }
 
-    public JoystickFAB(Context context, AttributeSet attrs) {
+    public JoystickFAB(Context context, AttributeSet attrs)
+    {
         super(context, attrs);
         setSpecificThings();
     }
 
-    public JoystickFAB(Context context, AttributeSet attrs, int defStyleAttr) {
+    public JoystickFAB(Context context, AttributeSet attrs, int defStyleAttr)
+    {
         super(context, attrs, defStyleAttr);
         setSpecificThings();
     }
 
-    public void setDefaultPosition(float x, float y, String position) {
+    public void setDefaultPosition(float x, float y, String position)
+    {
         this.position = position;
         setX(x - ((float) getWidth() / 2));
         posX = x;
@@ -40,7 +44,8 @@ public class JoystickFAB extends FloatingActionButton {
         Connection.setRight(0, 0);
     }
 
-    private void setSpecificThings() {
+    private void setSpecificThings()
+    {
         setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {

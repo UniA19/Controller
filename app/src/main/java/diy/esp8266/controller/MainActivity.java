@@ -12,7 +12,8 @@ import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+{
 
     public static final String PREFS_GLOBALS = "prefsGlobals";
     public static final String IS_GAMEPAD = "isGamepad";
@@ -23,7 +24,8 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         globals = getApplicationContext().getSharedPreferences(PREFS_GLOBALS, 0);
         editor = globals.edit();
 
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         calibrationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Connection.sendCalibrate();
                 toController();
             }
         });
@@ -81,7 +84,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
 
         Connection.start();
@@ -100,13 +104,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void toController() {
+    private void toController()
+    {
         Intent intent = new Intent(this, ControllerActivity.class);
         finish();
         startActivity(intent);
     }
 
-    private void restartActivity() {
+    private void restartActivity()
+    {
         Intent intent = getIntent();
         finish();
 

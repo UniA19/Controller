@@ -1,5 +1,6 @@
 package diy.esp8266.controller;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 import java.io.OutputStream;
@@ -115,7 +116,7 @@ class Connection
         }
     }
 
-    static void send(final String data)
+    private static void send(final String data)
     {
         if (connencted) {
             Thread thread = new Thread(new Runnable() {
@@ -137,7 +138,8 @@ class Connection
         send("<*cal>");
     }
 
-    static String format(int i)
+    @SuppressLint("DefaultLocale")
+    private static String format(int i)
     {
         if (i < 0) {
             return String.format("%04d", i);
