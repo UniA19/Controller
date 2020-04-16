@@ -12,14 +12,12 @@ import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import static diy.esp8266.controller.Globals.IS_DARK;
+import static diy.esp8266.controller.Globals.IS_DEBUG;
+import static diy.esp8266.controller.Globals.IS_GAMEPAD;
+import static diy.esp8266.controller.Globals.PREFS_GLOBALS;
 public class MainActivity extends AppCompatActivity
 {
-
-    public static final String PREFS_GLOBALS = "prefsGlobals";
-    public static final String IS_GAMEPAD = "isGamepad";
-    public static final String IS_DARK = "isDark";
-    public static final String IS_DEBUG = "isDebug";
-
     SharedPreferences globals;
     SharedPreferences.Editor editor;
 
@@ -75,7 +73,7 @@ public class MainActivity extends AppCompatActivity
         calibrationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Connection.sendCalibrate();
+                Connection.sendCalibrate(globals);
                 toController();
             }
         });
@@ -88,7 +86,7 @@ public class MainActivity extends AppCompatActivity
     {
         super.onResume();
 
-        Connection.start();
+        Connection.start(globals);
 
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(

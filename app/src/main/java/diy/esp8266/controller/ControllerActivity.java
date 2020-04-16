@@ -13,10 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import static diy.esp8266.controller.MainActivity.IS_DARK;
-import static diy.esp8266.controller.MainActivity.IS_DEBUG;
-import static diy.esp8266.controller.MainActivity.IS_GAMEPAD;
-import static diy.esp8266.controller.MainActivity.PREFS_GLOBALS;
+import static diy.esp8266.controller.Globals.IS_DARK;
+import static diy.esp8266.controller.Globals.IS_DEBUG;
+import static diy.esp8266.controller.Globals.IS_GAMEPAD;
+import static diy.esp8266.controller.Globals.PREFS_GLOBALS;
 
 public class ControllerActivity extends AppCompatActivity
 {
@@ -40,6 +40,14 @@ public class ControllerActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 toCalibration();
+            }
+        });
+
+        FloatingActionButton preferences = findViewById(R.id.preferences);
+        preferences.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toPreferences();
             }
         });
     }
@@ -94,6 +102,12 @@ public class ControllerActivity extends AppCompatActivity
     {
         Intent intent = new Intent(this, MainActivity.class);
         finish();
+        startActivity(intent);
+    }
+
+    private void toPreferences()
+    {
+        Intent intent = new Intent(this, PreferencesActivity.class);
         startActivity(intent);
     }
 

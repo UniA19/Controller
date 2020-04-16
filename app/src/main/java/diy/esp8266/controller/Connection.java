@@ -1,6 +1,7 @@
 package diy.esp8266.controller;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.io.OutputStream;
@@ -8,11 +9,13 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import static diy.esp8266.controller.Globals.DEF_IP;
+import static diy.esp8266.controller.Globals.DEF_PORT;
+import static diy.esp8266.controller.Globals.PREFS_IP;
+import static diy.esp8266.controller.Globals.PREFS_PORT;
+
 class Connection
 {
-    private static final String HOSTIP = "192.168.4.1";
-    private static final int PORT = 100;
-
     private static int leftX = 0, leftY = 0, rightX = 0, rightY = 0;
 
     private static final int coolDown = 150;
@@ -26,20 +29,20 @@ class Connection
 
     private static boolean wasStarted = false;
 
-    static void start()
+    static void start(final SharedPreferences globals)
     {
         if (!wasStarted) {
             wasStarted = true;
-            connect();
+            connect(globals);
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     int i = 0;
                     while (true) {
-                        checkConnection();
+                        checkConnection(globals);
                         boolean dontTimeOut = i * coolDown > 1000;//send every second (not exact)
                         if (updated || dontTimeOut) {
-                            send("<" + format(leftX) + "|" + format(leftY) + "|" + format(rightX) + "|" + format(rightY) + ">");
+                            send("<" + format(leftX) + "|" + format(leftY) + "|" + format(rightX) + "|" + format(rightY) + ">", globals);
                             updated = false;
                             i = 0;
                         }
@@ -52,10 +55,10 @@ class Connection
         }
     }
 
-    private static void checkConnection()
+    private static void checkConnection(SharedPreferences globals)
     {
         try {
-            InetAddress address = InetAddress.getByName(HOSTIP);
+            InetAddress address = InetAddress.getByName(globals.getString(PREFS_IP, DEF_IP));
             connencted = connencted && socket.isConnected() && address.isReachable(100);
         } catch (Exception ex) {
             connencted = false;
@@ -83,24 +86,25 @@ class Connection
     {
         Log.d("Input:", "<" + format(leftX) + "|" + format(leftY) + "|" + format(rightX) + "|" + format(rightY) + ">");
     }
-    private static void connect()
+
+    private static void connect(final SharedPreferences globals)
     {
-        checkConnection();
+        checkConnection(globals);
         if (!connencted) {
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        InetAddress address = InetAddress.getByName(HOSTIP);
+                        InetAddress address = InetAddress.getByName(globals.getString(PREFS_IP, DEF_IP));
                         if (address.isReachable(100)) {
                             if (output != null) output.close();
                             if (out != null) out.close();
                             if (socket != null) socket.close();
-                            socket = new Socket(HOSTIP, PORT);
+                            socket = new Socket(globals.getString(PREFS_IP, DEF_IP), globals.getInt(PREFS_PORT, DEF_PORT));
                             out = socket.getOutputStream();
                             output = new PrintWriter(out);
                             connencted = true;
-                            checkConnection();
+                            checkConnection(globals);
                         }
                     } catch (Exception e) {
                         System.out.println("------------------------------------------------------------------------------------------------------------------");
@@ -116,7 +120,7 @@ class Connection
         }
     }
 
-    private static void send(final String data)
+    private static void send(final String data, SharedPreferences globals)
     {
         if (connencted) {
             Thread thread = new Thread(new Runnable() {
@@ -129,13 +133,13 @@ class Connection
             });
             thread.start();
         } else {
-            connect();
+            connect(globals);
         }
     }
 
-    static void sendCalibrate()
+    static void sendCalibrate(SharedPreferences globals)
     {
-        send("<*cal>");
+        send("<*cal>", globals);
     }
 
     @SuppressLint("DefaultLocale")

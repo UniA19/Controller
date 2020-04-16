@@ -133,10 +133,10 @@
             android:layout_marginTop="36dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:text="Calibrate and Start"
-            android:textColor="@color/colorBackgroundLight"
+            android:text="@string/main_button_calibrate"
             android:textAllCaps="false"
             android:textSize="18dp"
+            android:textColor="@color/colorBackgroundLight"
             android:background="@drawable/calibration_button"
             android:elevation="100dp" />
 

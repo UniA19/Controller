@@ -24,4 +24,14 @@
         android:background="@drawable/joystickbase"
         app:srcCompat="@android:drawable/ic_menu_mylocation" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/preferences"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:background="@drawable/joystickbase"
+        android:backgroundTint="@color/colorPrimary"
+        app:srcCompat="@android:drawable/ic_menu_preferences" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

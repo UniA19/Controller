@@ -31,4 +31,8 @@
     <string name="main_switch_darkmode">Use Darkmode</string>
     <string name="main_switch_debugmode">Start in Debug-Mode</string>
     <string name="main_switch_gamepadmode">Use Gamepad Input</string>
+    <string name="main_button_calibrate">Calibrate and Start</string>
+    <string name="preferences_ip">IP</string>
+    <string name="preferences_port">Port</string>
+    <string name="preferences_back">back</string>
 </resources>
