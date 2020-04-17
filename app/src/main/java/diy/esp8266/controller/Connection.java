@@ -4,6 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
@@ -11,6 +14,7 @@ import java.net.Socket;
 
 import static diy.esp8266.controller.Globals.DEF_IP;
 import static diy.esp8266.controller.Globals.DEF_PORT;
+import static diy.esp8266.controller.Globals.IS_DEBUG;
 import static diy.esp8266.controller.Globals.PREFS_IP;
 import static diy.esp8266.controller.Globals.PREFS_PORT;
 
@@ -18,16 +22,18 @@ class Connection
 {
     private static int leftX = 0, leftY = 0, rightX = 0, rightY = 0;
 
-    private static final int coolDown = 150;
+    private static final int coolDown = 200;
 
     private static Socket socket;
     private static OutputStream out;
     private static PrintWriter output;
 
-    private static boolean connencted = false;
+    private static boolean connected = false;
     private static boolean updated = false;
 
     private static boolean wasStarted = false;
+    private static boolean isReceiving = false;
+
 
     static void start(final SharedPreferences globals)
     {
@@ -42,7 +48,7 @@ class Connection
                         checkConnection(globals);
                         boolean dontTimeOut = i * coolDown > 1000;//send every second (not exact)
                         if (updated || dontTimeOut) {
-                            send("<" + format(leftX) + "|" + format(leftY) + "|" + format(rightX) + "|" + format(rightY) + ">", globals);
+                            send("<#" + format(leftX) + "|" + format(leftY) + "|" + format(rightX) + "|" + format(rightY) + ">", globals);
                             updated = false;
                             i = 0;
                         }
@@ -59,11 +65,11 @@ class Connection
     {
         try {
             InetAddress address = InetAddress.getByName(globals.getString(PREFS_IP, DEF_IP));
-            connencted = connencted && socket.isConnected() && address.isReachable(100);
+            connected = connected && socket.isConnected() && address.isReachable(100);
         } catch (Exception ex) {
-            connencted = false;
+            connected = false;
         }
-        System.out.println("Connected: " + connencted);
+        //System.out.println("Connected: " + connected);
     }
 
     static void setLeft(int leftX, int leftY)
@@ -90,7 +96,7 @@ class Connection
     private static void connect(final SharedPreferences globals)
     {
         checkConnection(globals);
-        if (!connencted) {
+        if (!connected) {
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -103,8 +109,9 @@ class Connection
                             socket = new Socket(globals.getString(PREFS_IP, DEF_IP), globals.getInt(PREFS_PORT, DEF_PORT));
                             out = socket.getOutputStream();
                             output = new PrintWriter(out);
-                            connencted = true;
+                            connected = true;
                             checkConnection(globals);
+                            start(globals);
                         }
                     } catch (Exception e) {
                         System.out.println("------------------------------------------------------------------------------------------------------------------");
@@ -112,7 +119,7 @@ class Connection
                         e.printStackTrace();
                         System.out.println("------------------------------------------------------------------------------------------------------------------");
                         System.out.println("------------------------------------------------------------------------------------------------------------------");
-                        connencted = false;
+                        connected = false;
                     }
                 }
             });
@@ -122,7 +129,7 @@ class Connection
 
     private static void send(final String data, SharedPreferences globals)
     {
-        if (connencted) {
+        if (connected) {
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -151,4 +158,44 @@ class Connection
             return "+" + String.format("%03d", i);
         }
     }
+
+    static void receiveData(final SharedPreferences globals) {
+        if (!isReceiving) {
+            final Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("START RECEIVE");
+                    isReceiving = true;
+                    try {
+                        while (globals.getBoolean(IS_DEBUG, false)) {
+                            //System.out.println("Connected: " + connected + " socket closed: " + socket.isClosed());
+                            if (connected && !socket.isClosed()) {
+                                //System.out.println("In receive loop");
+                                InputStream input = socket.getInputStream();
+                                BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+                                int length = input.available();
+                                if (length > 0) {
+                                    while(!reader.ready()) Thread.sleep(10);
+                                    //System.out.println("Data available");
+                                    char[] arr = new char[length];
+                                    reader.read(arr, 0, length);
+                                    ControllerActivity.addToDebug(String.valueOf(arr));
+                                    System.out.println("Received: " + String.valueOf(arr));
+                                }
+                            }
+                            Thread.sleep(100);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        isReceiving = false;
+                        receiveData(globals);
+                    }
+                    isReceiving = false;
+                    System.out.println("ENDED RECEIVE");
+                }
+            });
+            thread.start();
+        }
+    }
 }
+

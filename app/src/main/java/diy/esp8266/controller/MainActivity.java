@@ -113,7 +113,6 @@ public class MainActivity extends AppCompatActivity
     {
         Intent intent = getIntent();
         finish();
-
         startActivity(intent);
     }
 

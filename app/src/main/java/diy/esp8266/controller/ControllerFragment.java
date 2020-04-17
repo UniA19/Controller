@@ -40,7 +40,6 @@ public class ControllerFragment extends Fragment
                 right.setDefaultPosition(view.getWidth() - padding, (float) view.getHeight() / 2, "right");
                 backRight.setX(view.getWidth() - padding - (float) backLeft.getWidth() / 2);
                 backRight.setY((float) (view.getHeight() - backLeft.getHeight()) / 2);
-
             }
         });
     }

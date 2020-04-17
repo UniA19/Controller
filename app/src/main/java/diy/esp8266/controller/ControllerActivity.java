@@ -1,5 +1,6 @@
 package diy.esp8266.controller;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -8,6 +9,7 @@ import android.view.InputDevice;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,6 +24,8 @@ public class ControllerActivity extends AppCompatActivity
 {
 
     SharedPreferences globals;
+    static TextView debug;
+    static ControllerActivity ca;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -57,6 +61,8 @@ public class ControllerActivity extends AppCompatActivity
     {
         super.onResume();
 
+        ca = this;
+
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -69,6 +75,10 @@ public class ControllerActivity extends AppCompatActivity
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             getWindow().getAttributes().layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
         }
+
+        debug = findViewById(R.id.text_debug);
+        Connection.receiveData(globals);
+
     }
 
     @Override
@@ -109,6 +119,23 @@ public class ControllerActivity extends AppCompatActivity
     {
         Intent intent = new Intent(this, PreferencesActivity.class);
         startActivity(intent);
+    }
+
+    @SuppressLint("SetTextI18n")
+    static void addToDebug(final String string)
+    {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                ca.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        debug.append(string + "\n");
+                    }
+                });
+            }
+        };
+        thread.start();
     }
 
 }
