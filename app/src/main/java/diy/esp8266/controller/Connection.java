@@ -175,7 +175,7 @@ class Connection
                                 BufferedReader reader = new BufferedReader(new InputStreamReader(input));
                                 int length = input.available();
                                 if (length > 0) {
-                                    while(!reader.ready()) Thread.sleep(10);
+                                    while(!reader.ready()) Thread.sleep(1);
                                     //System.out.println("Data available");
                                     char[] arr = new char[length];
                                     reader.read(arr, 0, length);
@@ -183,7 +183,7 @@ class Connection
                                     System.out.println("Received: " + String.valueOf(arr));
                                 }
                             }
-                            Thread.sleep(100);
+                            Thread.sleep(10);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
