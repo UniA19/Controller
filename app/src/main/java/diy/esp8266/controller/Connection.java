@@ -5,10 +5,9 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -25,8 +24,7 @@ class Connection
     private static final int coolDown = 200;
 
     private static Socket socket;
-    private static OutputStream out;
-    private static PrintWriter output;
+    private static DataOutputStream output;
 
     private static boolean connected = false;
     private static boolean updated = false;
@@ -45,7 +43,6 @@ class Connection
                 public void run() {
                     int i = 0;
                     while (true) {
-                        checkConnection(globals);
                         boolean dontTimeOut = i * coolDown > 1000;//send every second (not exact)
                         if (updated || dontTimeOut) {
                             send("<#" + format(leftX) + "|" + format(leftY) + "|" + format(rightX) + "|" + format(rightY) + ">", globals);
@@ -59,40 +56,6 @@ class Connection
             });
             thread.start();
         }
-    }
-
-    private static void checkConnection(SharedPreferences globals)
-    {
-        boolean con = true;
-        boolean clo = false;
-        boolean rea = true;
-
-        try {
-            InetAddress address = InetAddress.getByName(globals.getString(PREFS_IP, DEF_IP));
-            if (socket != null) {
-                con = socket.isConnected();
-                clo = socket.isClosed();
-            } else {
-                con = false;
-                clo = true;
-            }
-            rea = address.isReachable(100);
-            rea |= address.isReachable(100);
-            rea |= address.isReachable(100);
-            connected &= con && !clo && rea;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            connected = false;
-        }
-        if (!connected) {
-            try {
-                System.out.println("NOT CONNECTED! | connected: " + con + " | closed: " + clo + " | reachable: " + rea);
-                if (output != null) output.close();
-                if (out != null) out.close();
-                if (socket != null) socket.close();
-            } catch(Exception ex) {ex.printStackTrace();}
-        }
-        //System.out.println("Connected: " + connected);
     }
 
     static void setLeft(int leftX, int leftY)
@@ -118,7 +81,6 @@ class Connection
 
     private static void connect(final SharedPreferences globals)
     {
-        checkConnection(globals);
         if (!connected) {
             Thread thread = new Thread(new Runnable() {
                 @Override
@@ -128,18 +90,14 @@ class Connection
                         if (address.isReachable(100)) {
                             System.out.println("Tried to connect");
                             if (output != null) output.close();
-                            if (out != null) out.close();
                             if (socket != null) socket.close();
                             socket = new Socket(globals.getString(PREFS_IP, DEF_IP), globals.getInt(PREFS_PORT, DEF_PORT));
-                            out = socket.getOutputStream();
-                            output = new PrintWriter(out);
+                            output = new DataOutputStream(socket.getOutputStream());
                             connected = true;
-                            checkConnection(globals);
                             start(globals);
                         } else {
                             System.out.println("Address not reachable");
                             if (output != null) output.close();
-                            if (out != null) out.close();
                             if (socket != null) socket.close();
                         }
                     } catch (Exception e) {
@@ -156,15 +114,21 @@ class Connection
         }
     }
 
-    private static void send(final String data, SharedPreferences globals)
+    private static void send(final String data, final SharedPreferences globals)
     {
         if (connected) {
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    output.write(data);
-                    output.flush();
-                    System.out.println(data);
+                    try {
+                        output.writeChars(data);
+                        output.flush();
+                        System.out.println(data);
+                    } catch (Exception ex) {
+                        connected = false;
+                        connect(globals);
+                        ex.printStackTrace();
+                    }
                 }
             });
             thread.start();
