@@ -63,11 +63,34 @@ class Connection
 
     private static void checkConnection(SharedPreferences globals)
     {
+        boolean con = true;
+        boolean clo = false;
+        boolean rea = true;
+
         try {
             InetAddress address = InetAddress.getByName(globals.getString(PREFS_IP, DEF_IP));
-            connected = connected && socket.isConnected() && address.isReachable(100);
+            if (socket != null) {
+                con = socket.isConnected();
+                clo = socket.isClosed();
+            } else {
+                con = false;
+                clo = true;
+            }
+            rea = address.isReachable(100);
+            rea |= address.isReachable(100);
+            rea |= address.isReachable(100);
+            connected &= con && !clo && rea;
         } catch (Exception ex) {
+            ex.printStackTrace();
             connected = false;
+        }
+        if (!connected) {
+            try {
+                System.out.println("NOT CONNECTED! | connected: " + con + " | closed: " + clo + " | reachable: " + rea);
+                if (output != null) output.close();
+                if (out != null) out.close();
+                if (socket != null) socket.close();
+            } catch(Exception ex) {ex.printStackTrace();}
         }
         //System.out.println("Connected: " + connected);
     }
@@ -103,6 +126,7 @@ class Connection
                     try {
                         InetAddress address = InetAddress.getByName(globals.getString(PREFS_IP, DEF_IP));
                         if (address.isReachable(100)) {
+                            System.out.println("Tried to connect");
                             if (output != null) output.close();
                             if (out != null) out.close();
                             if (socket != null) socket.close();
@@ -112,6 +136,11 @@ class Connection
                             connected = true;
                             checkConnection(globals);
                             start(globals);
+                        } else {
+                            System.out.println("Address not reachable");
+                            if (output != null) output.close();
+                            if (out != null) out.close();
+                            if (socket != null) socket.close();
                         }
                     } catch (Exception e) {
                         System.out.println("------------------------------------------------------------------------------------------------------------------");
@@ -179,8 +208,9 @@ class Connection
                                     //System.out.println("Data available");
                                     char[] arr = new char[length];
                                     reader.read(arr, 0, length);
-                                    ControllerActivity.addToDebug(String.valueOf(arr));
-                                    System.out.println("Received: " + String.valueOf(arr));
+                                    String str = String.valueOf(arr);
+                                    ControllerActivity.addToDebug(str);
+                                    System.out.println("Received: " + str);
                                 }
                             }
                             Thread.sleep(10);
